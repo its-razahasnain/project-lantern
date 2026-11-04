@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: lantern-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lantern
+      POSTGRES_PASSWORD: lantern_dev_password
+      POSTGRES_DB: lantern
+    ports:
+      - "5432:5432"
+    volumes:
+      - lantern_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lantern -d lantern"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  lantern_postgres_data:
